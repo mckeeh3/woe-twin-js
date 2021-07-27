@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+
+package woe.twin;
+
+message Region {
+  int32 zoom = 1;
+  double topLeftLat = 2;
+  double topLeftLng = 3;
+  double botRightLat = 4;
+  double botRightLng = 5;
+}
+
+message TelemetryRequest {
+  string entityId = 1 [(akkaserverless.field).entity_key = true];
+  Region region = 2;
+  string action = 3;
+}
+
+message TelemetryResponse {
+  string message = 1;
+  int32 httpStatusCode = 2;
+  TelemetryRequest telemetryRequest = 3;
+}
+
+service IotDevice {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_ENTITY
+    component: '.domain.IotDevice'
+  };
+  rpc Telemetry (TelemetryRequest) returns (TelemetryResponse);
+}

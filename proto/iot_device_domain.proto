@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package woe.twin.domain;
+
+import "akkaserverless/annotations.proto";
+import "iot_device_api.proto";
+
+option (akkaserverless.file).event_sourced_entity = {
+  name: "IotDevice"
+  entity_type: "IotDevice"
+  state: "State"
+  events: "Created"
+  events: "Deleted"
+  events: "Happy"
+  events: "Sad"
+};
+
+message State {
+  string entityId = 1;
+  woe.twin.Region region = 2;
+  bool happy = 3;
+}
+
+message Created {
+  string entityId = 1;
+  woe.twin.Region region = 2;
+}
+
+message Deleted {
+  string entityId = 1;
+  woe.twin.Region region = 2;
+}
+
+message Happy {
+  string entityId = 1;
+  woe.twin.Region region = 2;
+}
+
+message Sad {
+  string entityId = 1;
+  woe.twin.Region region = 2;
+}
