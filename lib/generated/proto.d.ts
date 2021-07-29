@@ -130,6 +130,9 @@ export namespace woe {
 
             /** TelemetryRequest action */
             action?: (string|null);
+
+            /** TelemetryRequest startTimeNs */
+            startTimeNs?: (number|Long|null);
         }
 
         /** Represents a TelemetryRequest. */
@@ -149,6 +152,9 @@ export namespace woe {
 
             /** TelemetryRequest action. */
             public action: string;
+
+            /** TelemetryRequest startTimeNs. */
+            public startTimeNs: (number|Long);
 
             /**
              * Creates a new TelemetryRequest instance using the specified properties.

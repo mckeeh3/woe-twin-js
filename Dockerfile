@@ -2,7 +2,8 @@
 # See https://docs.docker.com/develop/develop-images/multistage-build/
 
 # Stage 1: Downloading dependencies and building the application
-FROM node:14.17.0-buster-slim AS builder
+#FROM node:14.17.0-buster-slim AS builder
+FROM node:16-buster-slim AS builder
 
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 

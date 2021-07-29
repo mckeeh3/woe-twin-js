@@ -17,6 +17,7 @@ message TelemetryRequest {
   string entityId = 1 [(akkaserverless.field).entity_key = true];
   Region region = 2;
   string action = 3;
+  int64 startTimeNs = 4;
 }
 
 message TelemetryResponse {

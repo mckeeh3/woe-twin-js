@@ -1,4 +1,6 @@
 import akkaserverless from '@lightbend/akkaserverless-javascript-sdk';
+import log from './logger.js';
+
 const EventSourcedEntity = akkaserverless.EventSourcedEntity;
 
 /**
@@ -22,6 +24,7 @@ const EventSourcedEntity = akkaserverless.EventSourcedEntity;
 const entity = new EventSourcedEntity(['iot_device_api.proto', 'iot_device_domain.proto'], 'woe.twin.IotDevice', 'IotDevice', {
   includeDirs: ['./proto'],
   serializeFallbackToJson: true,
+  forwardHeaders: [],
 });
 
 const telemetryResponse = entity.lookupType('woe.twin.TelemetryResponse');
@@ -31,7 +34,13 @@ const eventDeleted = entity.lookupType('woe.twin.domain.Deleted');
 const eventHappy = entity.lookupType('woe.twin.domain.Happy');
 const eventSad = entity.lookupType('woe.twin.domain.Sad');
 
+const instanceStartTime = Date.now();
+const instanceTime = () => {
+  return `${Date.now() - instanceStartTime}s`;
+};
+
 const telemetryCreate = (command, ctx) => {
+  log(`Telemetry command ${command.action} ${command.entityId}`);
   ctx.emit(
     eventCreated.create({
       entityId: command.entityId,
@@ -46,6 +55,7 @@ const telemetryCreate = (command, ctx) => {
 };
 
 const telemetryDelete = (command, ctx) => {
+  log(`Telemetry command ${command.action} ${command.entityId}`);
   ctx.emit(
     eventDeleted.create({
       entityId: command.entityId,
@@ -60,6 +70,7 @@ const telemetryDelete = (command, ctx) => {
 };
 
 const telemetryHappy = (command, ctx) => {
+  log(`Telemetry command ${command.action} ${command.entityId}`);
   ctx.emit(
     eventHappy.create({
       entityId: command.entityId,
@@ -74,6 +85,7 @@ const telemetryHappy = (command, ctx) => {
 };
 
 const telemetrySad = (command, ctx) => {
+  log(`Telemetry command ${command.action} ${command.entityId}`);
   ctx.emit(
     eventSad.create({
       entityId: command.entityId,
@@ -158,6 +170,10 @@ entity.setBehavior((state) => ({
   eventHandlers: eventHandlers,
 }));
 
-entity.setInitial((entityId) => ({}));
+// entity.setInitial((entityId) => ({}));
+entity.setInitial((entityId) => {
+  // log(`Start entity ${entityId}`);
+  return {};
+});
 
 export default entity;
