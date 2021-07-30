@@ -25,6 +25,7 @@ const entity = new EventSourcedEntity(['iot_device_api.proto', 'iot_device_domai
   includeDirs: ['./proto'],
   serializeFallbackToJson: true,
   forwardHeaders: [],
+  entityPassivationStrategy: { timeout: 120 * 1000, }, // milliseconds
 });
 
 const telemetryResponse = entity.lookupType('woe.twin.TelemetryResponse');
