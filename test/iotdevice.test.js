@@ -89,7 +89,7 @@ describe('IotDevice', () => {
       expect(entity.state.happy).to.true;
     });
 
-    it('should create with ping of uncreated device', () => {
+    it('should do nothing with ping of existing device', () => {
       const telemetryRequest = commandTelemetryRequest.create({
         entityId: entityId,
         region: region,
@@ -123,6 +123,23 @@ describe('IotDevice', () => {
       expect(entity.error).to.be.undefined;
 
       expect(entity.state).to.eql({});
+    });
+  });
+  describe('Telemetry ping only', () => {
+    it('should create with ping of uncreated device', () => {
+      const telemetryRequest = commandTelemetryRequest.create({
+        entityId: entityId,
+        region: region,
+        action: 'ping',
+      });
+      const result = entity.handleCommand('Telemetry', telemetryRequest);
+
+      expect(result.httpStatusCode).to.equal(200);
+      expect(entity.error).to.be.undefined;
+
+      expect(entity.state.entityId).to.eql(entityId);
+      expect(entity.state.region).to.eql(region);
+      expect(entity.state.happy).to.true;
     });
   });
 });

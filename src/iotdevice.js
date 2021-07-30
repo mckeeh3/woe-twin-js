@@ -34,11 +34,6 @@ const eventDeleted = entity.lookupType('woe.twin.domain.Deleted');
 const eventHappy = entity.lookupType('woe.twin.domain.Happy');
 const eventSad = entity.lookupType('woe.twin.domain.Sad');
 
-const instanceStartTime = Date.now();
-const instanceTime = () => {
-  return `${Date.now() - instanceStartTime}s`;
-};
-
 const telemetryCreate = (command, ctx) => {
   log(`Telemetry command ${command.action} ${command.entityId}`);
   ctx.emit(
@@ -101,6 +96,7 @@ const telemetrySad = (command, ctx) => {
 
 const telemetryPing = (command, state, ctx) => {
   if (state && Object.keys(state).length === 0) {
+    command.action = 'create';
     return telemetryCreate(command, ctx);
   }
   return telemetryResponse.create({
@@ -170,9 +166,8 @@ entity.setBehavior((state) => ({
   eventHandlers: eventHandlers,
 }));
 
-// entity.setInitial((entityId) => ({}));
 entity.setInitial((entityId) => {
-  // log(`Start entity ${entityId}`);
+  log(`Start entity ${entityId}`);
   return {};
 });
 
